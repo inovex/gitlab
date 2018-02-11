@@ -1,0 +1,20 @@
+sudo: required
+
+services:
+  - docker
+
+before_install:
+  - set -e
+
+env:
+  - GITLAB_VERSION=10.2.2
+  - GITLAB_VERSION=10.3.4
+  - GITLAB_VERSION=10.4.3
+
+script:
+  - image_name="inovex/gitlab:${GITLAB_VERSION?}-${TRAVIS_COMMIT:0:7}"
+  - docker build --pull --build-arg "GITLAB_VERSION=${GITLAB_VERSION?}" --tag ${image_name?} .
+  - if [[ "${TRAVIS_BRANCH?}" == "master" && "${TRAVIS_PULL_REQUEST?}" == "false" ]]; then
+    docker login -u "${DOCKER_USERNAME?}" -p "${DOCKER_PASSWORD?}";
+    docker push ${image_name?};
+    fi

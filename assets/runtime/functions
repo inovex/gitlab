@@ -1,0 +1,159 @@
+set -e
+
+## Execute a command as git
+exec_as_git() {
+  if [[ $(whoami) == git ]]; then
+    $@
+  else
+    sudo -HEu git "$@"
+  fi
+}
+
+#update_template() {
+#  /etc/docker-gitlab/image-build-helper-templater $@
+#}
+
+gitlab_configure_secrets() {
+  echo "Configuring gitlab::secrets..."
+
+  local shell_secret="${GITLAB_INSTALL_DIR?}/.gitlab_shell_secret"
+  if [[ ! -f "${shell_secret}" ]]; then
+    exec_as_git openssl rand -hex -out "${shell_secret}" 16
+    chmod 600 "${shell_secret}"
+  fi
+
+  local workhorse_secret="${GITLAB_INSTALL_DIR?}/.gitlab_workhorse_secret"
+  if [[ ! -f "${workhorse_secret}" ]]; then
+    exec_as_git openssl rand -base64 -out "${workhorse_secret}" 32
+    chmod 600 "${workhorse_secret}"
+  fi
+}
+
+initialize_datadir() {
+  # initializing datadir
+  chmod 755 ${GITLAB_DATA_DIR?}
+  chown git: ${GITLAB_DATA_DIR?}
+
+  # create the ssh directory for server keys
+  mkdir -p ${GITLAB_DATA_DIR?}/ssh
+  chown root: ${GITLAB_DATA_DIR?}/ssh
+
+  # create the repositories directory and make sure it has the right permissions
+  mkdir -p ${GITLAB_REPOS_DIR?}
+  chmod 755 ${GITLAB_REPOS_DIR?}/
+  chown git: ${GITLAB_REPOS_DIR?}
+
+  # create build traces directory
+  mkdir -p ${GITLAB_BUILDS_DIR?}
+  chmod 755 ${GITLAB_BUILDS_DIR?}
+  chown git: ${GITLAB_BUILDS_DIR?}
+
+  # gitlab:backup:create does not respect the builds_path configuration, so we
+  # symlink ${GITLAB_INSTALL_DIR?}/builds -> ${GITLAB_BUILDS_DIR?}
+  rm -rf ${GITLAB_INSTALL_DIR?}/builds
+  ln -sf ${GITLAB_BUILDS_DIR?} ${GITLAB_INSTALL_DIR?}/builds
+
+  # create downloads directory
+  mkdir -p ${GITLAB_DOWNLOADS_DIR?}
+  chmod 755 ${GITLAB_DOWNLOADS_DIR?}
+  chown git: ${GITLAB_DOWNLOADS_DIR?}
+
+  # create temp directory
+  chmod 755 ${GITLAB_TEMP_DIR?}
+  chown git: ${GITLAB_TEMP_DIR?}
+
+  # create shared directory
+  mkdir -p ${GITLAB_SHARED_DIR?}
+  chmod 755 ${GITLAB_SHARED_DIR?}
+  chown git: ${GITLAB_SHARED_DIR?}
+
+  # create attifacts dir
+  mkdir -p ${GITLAB_ARTIFACTS_DIR?}
+  chmod 755 ${GITLAB_ARTIFACTS_DIR?}
+  chown git: ${GITLAB_ARTIFACTS_DIR?}
+
+  # create pages dir
+  mkdir -p ${GITLAB_PAGES_DIR?}
+  chmod 755 ${GITLAB_PAGES_DIR?}
+  chown git: ${GITLAB_PAGES_DIR?}
+
+  # symlink ${GITLAB_INSTALL_DIR?}/shared -> ${GITLAB_DATA_DIR?}/shared
+  rm -rf ${GITLAB_INSTALL_DIR?}/shared
+  ln -sf ${GITLAB_SHARED_DIR?} ${GITLAB_INSTALL_DIR?}/shared
+
+  # create lfs-objects directory
+  mkdir -p ${GITLAB_LFS_OBJECTS_DIR?}
+  chmod 755 ${GITLAB_LFS_OBJECTS_DIR?}
+  chown git: ${GITLAB_LFS_OBJECTS_DIR?}
+
+  # create registry dir
+  mkdir -p ${GITLAB_REGISTRY_DIR?}
+  chmod 755 ${GITLAB_REGISTRY_DIR?}
+  chown git: ${GITLAB_REGISTRY_DIR?}
+
+  # create the backups directory
+  mkdir -p ${GITLAB_BACKUP_DIR?}
+  chown git: ${GITLAB_BACKUP_DIR?}
+
+  # create the uploads directory
+  mkdir -p ${GITLAB_DATA_DIR?}/uploads
+  #find ${GITLAB_DATA_DIR?}/uploads -type f -exec chmod 0644 {} \;
+  #find ${GITLAB_DATA_DIR?}/uploads -type d -not -path ${GITLAB_DATA_DIR?}/uploads -exec chmod 0755 {} \;
+  chmod 0700 ${GITLAB_DATA_DIR?}/uploads/
+  chown git: ${GITLAB_DATA_DIR?}/uploads
+
+  # create the .ssh directory
+  mkdir -p ${GITLAB_DATA_DIR?}/.ssh
+  touch ${GITLAB_DATA_DIR?}/.ssh/authorized_keys
+  chmod 700 ${GITLAB_DATA_DIR?}/.ssh
+  chmod 600 ${GITLAB_DATA_DIR?}/.ssh/authorized_keys
+  chown -R git: ${GITLAB_DATA_DIR?}/.ssh
+
+  if [[ -d ${GITLAB_DATA_DIR?}/prometheus/ ]]; then
+    # Cleanup any existing prometheus metrics #TODO add textcollector metrics dir
+    find ${GITLAB_DATA_DIR?}/prometheus/ -type f -name '*.db' -delete
+  else
+    # create the prometheus metrics directory
+    mkdir -p ${GITLAB_DATA_DIR?}/prometheus
+  fi
+  chown git: ${GITLAB_DATA_DIR?}/prometheus
+
+  # setup metrics directory (node_exporter textcollector)
+  mkdir -p ${GITLAB_METRICS_DIR?}
+  chown git: ${GITLAB_METRICS_DIR?}
+
+  echo "Creating gitlab-shell hooks..."
+  exec_as_git ${GITLAB_SHELL_INSTALL_DIR?}/bin/create-hooks
+}
+
+generate_ssh_key() {
+  echo -n "${1^^} "
+  ssh-keygen -q -t ${1} -N '' -f ${2}
+}
+
+generate_ssh_host_keys() {
+  sed -i "s|HostKey /etc/ssh/|HostKey ${GITLAB_DATA_DIR?}/ssh/|g" /etc/ssh/sshd_config
+  if [[ ! -e ${GITLAB_DATA_DIR?}/ssh/ssh_host_rsa_key ]]; then
+    echo -n "Generating OpenSSH host keys... "
+    generate_ssh_key rsa      ${GITLAB_DATA_DIR?}/ssh/ssh_host_rsa_key
+    generate_ssh_key dsa      ${GITLAB_DATA_DIR?}/ssh/ssh_host_dsa_key
+    generate_ssh_key ecdsa    ${GITLAB_DATA_DIR?}/ssh/ssh_host_ecdsa_key
+    generate_ssh_key ed25519  ${GITLAB_DATA_DIR?}/ssh/ssh_host_ed25519_key
+    echo
+  fi
+
+  # ensure existing host keys have the right permissions
+  chmod 0600 ${GITLAB_DATA_DIR?}/ssh/*_key
+  chmod 0644 ${GITLAB_DATA_DIR?}/ssh/*.pub
+}
+
+initialize_system() {
+  initialize_datadir
+  gitlab_configure_secrets
+  generate_ssh_host_keys
+
+  # chown externally mounted config files
+  chown -R git: \
+    ${GITLAB_INSTALL_DIR?}/config/ \
+    ${GITLAB_SHELL_INSTALL_DIR?}/config.yml
+}
