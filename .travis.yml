@@ -7,10 +7,10 @@ before_install:
   - set -e
 
 env:
-  - GITLAB_VERSION=10.2.2
   - GITLAB_VERSION=10.2.8 # latest 10.2.x
   - GITLAB_VERSION=10.3.7 # latest 10.3.x
-  - GITLAB_VERSION=10.4.3 # latest 10.4.x
+  - GITLAB_VERSION=10.4.4 # latest 10.4.x
+  - GITLAB_VERSION=10.5.2 # latest 10.5.x
 
 script:
   - image_name="inovex/gitlab:${GITLAB_VERSION?}-${TRAVIS_COMMIT:0:7}"
