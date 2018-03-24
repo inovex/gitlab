@@ -74,7 +74,7 @@ GITLAB_WORKHORSE_VERSION=$(cat ${GITLAB_INSTALL_DIR?}/GITLAB_WORKHORSE_VERSION)
 
 case ${GITLAB_VERSION?} in
 10.6.*)
-  git apply -v patch ${GITLAB_BUILD_DIR?}/patches/10.6/*
+  git apply -v ${GITLAB_BUILD_DIR?}/patches/10.6/*
 ;;
 *)
   patch \
