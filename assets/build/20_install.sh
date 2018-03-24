@@ -71,21 +71,16 @@ GITLAB_SHELL_VERSION=$(cat ${GITLAB_INSTALL_DIR?}/GITLAB_SHELL_VERSION)
 GITLAB_WORKHORSE_VERSION=$(cat ${GITLAB_INSTALL_DIR?}/GITLAB_WORKHORSE_VERSION)
 
 # patch Gitlab to support oid connect
-patch \
-  ${GITLAB_INSTALL_DIR?}/app/controllers/omniauth_callbacks_controller.rb \
-  ${GITLAB_BUILD_DIR?}/patches/omniauth_callbacks_controller.patch
 
 case ${GITLAB_VERSION?} in
 10.6.*)
-  patch \
-    ${GITLAB_INSTALL_DIR?}/lib/gitlab/auth/o_auth/user.rb \
-    ${GITLAB_BUILD_DIR?}/patches/user.rb.patch
-
-  patch \
-    ${GITLAB_INSTALL_DIR?}/lib/gitlab/auth/ldap/person.rb \
-    ${GITLAB_BUILD_DIR?}/patches/person.rb.patch
+  git apply -v patch ${GITLAB_BUILD_DIR?}/patches/10.6/*
 ;;
 *)
+  patch \
+    ${GITLAB_INSTALL_DIR?}/app/controllers/omniauth_callbacks_controller.rb \
+    ${GITLAB_BUILD_DIR?}/patches/omniauth_callbacks_controller.patch
+
   patch \
     ${GITLAB_INSTALL_DIR?}/lib/gitlab/o_auth/user.rb \
     ${GITLAB_BUILD_DIR?}/patches/user.rb.patch
