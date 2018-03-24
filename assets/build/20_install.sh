@@ -79,15 +79,15 @@ case ${GITLAB_VERSION?} in
 *)
   patch \
     ${GITLAB_INSTALL_DIR?}/app/controllers/omniauth_callbacks_controller.rb \
-    ${GITLAB_BUILD_DIR?}/patches/omniauth_callbacks_controller.patch
+    ${GITLAB_BUILD_DIR?}/patches/old/omniauth_callbacks_controller.patch
 
   patch \
     ${GITLAB_INSTALL_DIR?}/lib/gitlab/o_auth/user.rb \
-    ${GITLAB_BUILD_DIR?}/patches/user.rb.patch
+    ${GITLAB_BUILD_DIR?}/patches/old/user.rb.patch
 
   patch \
     ${GITLAB_INSTALL_DIR?}/lib/gitlab/ldap/person.rb \
-    ${GITLAB_BUILD_DIR?}/patches/person.rb.patch
+    ${GITLAB_BUILD_DIR?}/patches/old/person.rb.patch
 esac
 
 # configure Gitlab
