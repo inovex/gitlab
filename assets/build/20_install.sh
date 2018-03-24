@@ -75,13 +75,25 @@ patch \
   ${GITLAB_INSTALL_DIR?}/app/controllers/omniauth_callbacks_controller.rb \
   ${GITLAB_BUILD_DIR?}/patches/omniauth_callbacks_controller.patch
 
-patch \
-  ${GITLAB_INSTALL_DIR?}/lib/gitlab/o_auth/user.rb \
-  ${GITLAB_BUILD_DIR?}/patches/user.rb.patch
+case ${GITLAB_VERSION?} in
+10.6.*)
+  patch \
+    ${GITLAB_INSTALL_DIR?}/lib/gitlab/auth/o_auth/user.rb \
+    ${GITLAB_BUILD_DIR?}/patches/user.rb.patch
 
-patch \
-  ${GITLAB_INSTALL_DIR?}/lib/gitlab/ldap/person.rb \
-  ${GITLAB_BUILD_DIR?}/patches/person.rb.patch
+  patch \
+    ${GITLAB_INSTALL_DIR?}/lib/gitlab/auth/ldap/person.rb \
+    ${GITLAB_BUILD_DIR?}/patches/person.rb.patch
+;;
+*)
+  patch \
+    ${GITLAB_INSTALL_DIR?}/lib/gitlab/o_auth/user.rb \
+    ${GITLAB_BUILD_DIR?}/patches/user.rb.patch
+
+  patch \
+    ${GITLAB_INSTALL_DIR?}/lib/gitlab/ldap/person.rb \
+    ${GITLAB_BUILD_DIR?}/patches/person.rb.patch
+esac
 
 # configure Gitlab
 exec_as_git cp ${GITLAB_INSTALL_DIR?}/config/resque.yml.example ${GITLAB_INSTALL_DIR?}/config/resque.yml
