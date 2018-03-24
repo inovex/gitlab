@@ -27,6 +27,7 @@ ENV \
     libxslt-dev \
     libyaml-dev \
     make \
+    patch \
     paxctl \
     pkg-config \
     ruby2.3-dev \
