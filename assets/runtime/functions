@@ -151,9 +151,4 @@ initialize_system() {
   initialize_datadir
   gitlab_configure_secrets
   generate_ssh_host_keys
-
-  # chown externally mounted config files
-  chown -R git: \
-    ${GITLAB_INSTALL_DIR?}/config/ \
-    ${GITLAB_SHELL_INSTALL_DIR?}/config.yml
 }
