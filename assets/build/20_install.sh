@@ -76,6 +76,9 @@ case ${GITLAB_VERSION?} in
 11.4.*)
   git apply -v ${GITLAB_BUILD_DIR?}/patches/11.4/*
 ;;
+10.8.*)
+  git apply -v ${GITLAB_BUILD_DIR?}/patches/11.4/*
+;;
 10.6.*)
   git apply -v ${GITLAB_BUILD_DIR?}/patches/10.6/*
 ;;
