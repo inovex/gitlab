@@ -1,0 +1,28 @@
+diff --git a/lib/gitlab/auth/ldap/person.rb b/lib/gitlab/auth/ldap/person.rb
+index a0244a3..aa744ad 100644
+--- a/lib/gitlab/auth/ldap/person.rb
++++ b/lib/gitlab/auth/ldap/person.rb
+@@ -18,6 +18,11 @@ module Gitlab
+           adapter.user(adapter.config.uid, uid)
+         end
+ 
++        def self.find_by_uuid(uuid, adapter)
++          uuid = Net::LDAP::Filter.escape(uuid)
++          adapter.user('entryUUID', uuid)
++        end
++
+         def self.find_by_dn(dn, adapter)
+           adapter.user('dn', dn)
+         end
+diff --git a/lib/gitlab/auth/o_auth/user.rb b/lib/gitlab/auth/o_auth/user.rb
+index a4e8a41..919e1bd 100644
+--- a/lib/gitlab/auth/o_auth/user.rb
++++ b/lib/gitlab/auth/o_auth/user.rb
+@@ -144,6 +144,7 @@ module Gitlab
+ 
+         def find_ldap_person(auth_hash, adapter)
+           Gitlab::Auth::LDAP::Person.find_by_uid(auth_hash.uid, adapter) ||
++            Gitlab::Auth::LDAP::Person.find_by_uuid(auth_hash.uid, adapter) ||
+             Gitlab::Auth::LDAP::Person.find_by_email(auth_hash.uid, adapter) ||
+             Gitlab::Auth::LDAP::Person.find_by_dn(auth_hash.uid, adapter)
+ 

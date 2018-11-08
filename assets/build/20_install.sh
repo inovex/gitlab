@@ -70,9 +70,12 @@ chown git: ${GITLAB_INSTALL_DIR?}/.bundle/config
 GITLAB_SHELL_VERSION=$(cat ${GITLAB_INSTALL_DIR?}/GITLAB_SHELL_VERSION)
 GITLAB_WORKHORSE_VERSION=$(cat ${GITLAB_INSTALL_DIR?}/GITLAB_WORKHORSE_VERSION)
 
-# patch Gitlab to support oid connect
+# patch Gitlab to support oid connect (https://gitlab.com/gitlab-org/gitlab-ce/issues/23255)
 
 case ${GITLAB_VERSION?} in
+11.4.*)
+  git apply -v ${GITLAB_BUILD_DIR?}/patches/11.4/*
+;;
 10.6.*)
   git apply -v ${GITLAB_BUILD_DIR?}/patches/10.6/*
 ;;
@@ -98,7 +101,8 @@ exec_as_git cp ${GITLAB_INSTALL_DIR?}/config/database.yml.postgresql ${GITLAB_IN
 # revert `rake gitlab:setup` changes from gitlabhq/gitlabhq@a54af831bae023770bf9b2633cc45ec0d5f5a66a
 exec_as_git sed -i 's/db:reset/db:setup/' ${GITLAB_INSTALL_DIR?}/lib/tasks/gitlab/setup.rake
 
-exec_as_git bundle add omniauth-openid-connect #patch Gitlab to support oid connect
+# patch Gitlab to support oid connect (https://gitlab.com/gitlab-org/gitlab-ce/issues/23255)
+exec_as_git bundle add omniauth-openid-connect
 exec_as_git bundle install --deployment
 
 echo "Compiling assets. Please be patient, this will take a damn long while..."
@@ -128,7 +132,14 @@ find ${GITLAB_HOME?}/gitlab-workhorse -mindepth 1 -maxdepth 1 -type f -perm -o+x
 echo "Setup gitaly..."
 
 cd ${GITLAB_INSTALL_DIR?}
-exec_as_git bundle exec rake "gitlab:gitaly:install[${GITALY_INSTALL_DIR?}]"
+case ${GITLAB_VERSION?} in
+11.4.*)
+  exec_as_git bundle exec rake "gitlab:gitaly:install[${GITALY_INSTALL_DIR?},${GITLAB_REPOS_DIR?}]"
+;;
+*)
+  exec_as_git bundle exec rake "gitlab:gitaly:install[${GITALY_INSTALL_DIR?}]"
+;;
+esac
 
 ###############################################
 # MISC

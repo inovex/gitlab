@@ -1,4 +1,4 @@
-FROM ubuntu:xenial-20170915
+FROM ubuntu:xenial-20181005
 
 # sperated ENV layers due to dependices to upper-layered env vars
 ENV \
