@@ -74,14 +74,11 @@ GITLAB_WORKHORSE_VERSION=$(cat ${GITLAB_INSTALL_DIR?}/GITLAB_WORKHORSE_VERSION)
 # patch Gitlab to support oid connect (https://gitlab.com/gitlab-org/gitlab-ce/issues/23255)
 
 case ${GITLAB_VERSION?} in
+11.6.*)
+  git apply -v ${GITLAB_BUILD_DIR?}/patches/11.4/*
+;;
 11.4.*)
   git apply -v ${GITLAB_BUILD_DIR?}/patches/11.4/*
-;;
-10.8.*)
-  git apply -v ${GITLAB_BUILD_DIR?}/patches/11.4/*
-;;
-10.6.*)
-  git apply -v ${GITLAB_BUILD_DIR?}/patches/10.6/*
 ;;
 *)
   patch \
@@ -137,6 +134,9 @@ echo "Setup gitaly..."
 
 cd ${GITLAB_INSTALL_DIR?}
 case ${GITLAB_VERSION?} in
+11.6.*)
+  exec_as_git bundle exec rake "gitlab:gitaly:install[${GITALY_INSTALL_DIR?},${GITLAB_REPOS_DIR?}]"
+;;
 11.4.*)
   exec_as_git bundle exec rake "gitlab:gitaly:install[${GITALY_INSTALL_DIR?},${GITLAB_REPOS_DIR?}]"
 ;;
