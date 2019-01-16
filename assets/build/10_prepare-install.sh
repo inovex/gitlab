@@ -18,9 +18,6 @@ deb https://dl.yarnpkg.com/debian/ stable main
 EOF
 
 case ${GITLAB_VERSION?} in
-"10.2.2")
-  echo "deb https://deb.nodesource.com/node_7.x xenial main" >> /etc/apt/sources.list.d/gitlab-install.list
-;;
 *)
   echo "deb https://deb.nodesource.com/node_9.x xenial main" >> /etc/apt/sources.list.d/gitlab-install.list
 ;;
