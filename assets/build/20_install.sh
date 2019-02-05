@@ -74,6 +74,9 @@ GITLAB_WORKHORSE_VERSION=$(cat ${GITLAB_INSTALL_DIR?}/GITLAB_WORKHORSE_VERSION)
 # patch Gitlab to support oid connect (https://gitlab.com/gitlab-org/gitlab-ce/issues/23255)
 
 case ${GITLAB_VERSION?} in
+11.7.*)
+  git apply -v ${GITLAB_BUILD_DIR?}/patches/11.4/*
+;;
 11.6.*)
   git apply -v ${GITLAB_BUILD_DIR?}/patches/11.4/*
 ;;
