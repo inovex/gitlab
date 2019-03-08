@@ -114,7 +114,7 @@ exec_as_git bundle install --deployment
 
 echo "Compiling assets. Please be patient, this will take a damn long while..."
 exec_as_git yarn install --production --pure-lockfile
-exec_as_git bundle exec rake gitlab:assets:compile USE_DB=false SKIP_STORAGE_VALIDATION=true
+exec_as_git bundle exec rake gitlab:assets:compile USE_DB=false SKIP_STORAGE_VALIDATION=true NODE_OPTIONS="--max-old-space-size=4096"
 
 
 ###############################################
