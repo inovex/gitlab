@@ -113,3 +113,4 @@ CMD /bin/bash -c "\
   source ${GITLAB_RUNTIME_DIR?}/functions && \
   initialize_system && \
   exec /usr/bin/supervisord -nc /etc/supervisor/supervisord.conf"
+
