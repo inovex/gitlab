@@ -19,7 +19,7 @@ EOF
 
 case ${GITLAB_VERSION?} in
 *)
-  echo "deb https://deb.nodesource.com/node_9.x xenial main" >> /etc/apt/sources.list.d/gitlab-install.list
+  echo "deb https://deb.nodesource.com/node_10.x xenial main" >> /etc/apt/sources.list.d/gitlab-install.list
 ;;
 esac
 
