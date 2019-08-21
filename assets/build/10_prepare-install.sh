@@ -2,8 +2,8 @@
 
 export DEBIAN_FRONTEND=noninteractive
 
-# Check PCRE2 Version
-ldd /usr/local/bin/git | grep pcre2
+# Check GIT Version
+git --version
 
 # Updating package cache and install wget to import keys
 apt-get update -qq
