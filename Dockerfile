@@ -30,7 +30,10 @@ ENV \
     patch \
     paxctl \
     pkg-config \
-    ruby2.5-dev \
+    ruby2.6-dev \
+    runit \
+    rsync \
+    checkinstall \
     zlib1g-dev \
   " \
   GITLAB_DEPENDENCIES="\
@@ -57,7 +60,7 @@ ENV \
     python-docutils \
     python2.7 \
     redis-tools \
-    ruby2.5 \
+    ruby2.6 \
     supervisor \
     tzdata \
     yarn \
@@ -97,7 +100,7 @@ ENV \
 
 ARG GITLAB_VERSION
 ARG GITLAB_DOWNLOAD_URL=https://gitlab.com/gitlab-org/gitlab-ce/repository/v${GITLAB_VERSION}/archive.tar.gz
-ARG GOLANG_VERSION=1.11.4
+ARG GOLANG_VERSION=1.11.10
 
 COPY assets/runtime/ ${GITLAB_RUNTIME_DIR}/
 
