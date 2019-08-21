@@ -115,8 +115,8 @@ exec_as_git cp ${GITLAB_INSTALL_DIR?}/config/database.yml.postgresql ${GITLAB_IN
 exec_as_git sed -i 's/db:reset/db:setup/' ${GITLAB_INSTALL_DIR?}/lib/tasks/gitlab/setup.rake
 
 # patch Gitlab to support oid connect (https://gitlab.com/gitlab-org/gitlab-ce/issues/23255)
-exec_as_git bundle add omniauth-openid-connect
-exec_as_git bundle install --deployment
+#exec_as_git bundle add omniauth-openid-connect
+#exec_as_git bundle install --deployment
 
 echo "Compiling assets. Please be patient, this will take a damn long while..."
 exec_as_git yarn install --production --pure-lockfile
