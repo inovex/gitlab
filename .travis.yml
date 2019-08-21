@@ -7,8 +7,8 @@ before_install:
   - set -e
 
 env:
-  - GITLAB_VERSION=11.8.7
-  - GITLAB_VERSION=11.9.8
+# - GITLAB_VERSION=11.9.7
+  - GITLAB_VERSION=12.1.6
 
 script:
   - image_name="inovex/gitlab:${GITLAB_VERSION?}-${TRAVIS_COMMIT:0:7}"
