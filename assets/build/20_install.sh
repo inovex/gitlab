@@ -73,38 +73,38 @@ GITLAB_WORKHORSE_VERSION=$(cat ${GITLAB_INSTALL_DIR?}/GITLAB_WORKHORSE_VERSION)
 
 # patch Gitlab to support oid connect (https://gitlab.com/gitlab-org/gitlab-ce/issues/23255)
 
-case ${GITLAB_VERSION?} in
-12.1.*)
-  git apply -v ${GITLAB_BUILD_DIR?}/patches/11.4/*
-;;
-11.9.*)
-  git apply -v ${GITLAB_BUILD_DIR?}/patches/11.4/*
-;;
-11.8.*)
-  git apply -v ${GITLAB_BUILD_DIR?}/patches/11.4/*
-;;
-11.7.*)
-  git apply -v ${GITLAB_BUILD_DIR?}/patches/11.4/*
-;;
-11.6.*)
-  git apply -v ${GITLAB_BUILD_DIR?}/patches/11.4/*
-;;
-11.4.*)
-  git apply -v ${GITLAB_BUILD_DIR?}/patches/11.4/*
-;;
-*)
-  patch \
-    ${GITLAB_INSTALL_DIR?}/app/controllers/omniauth_callbacks_controller.rb \
-    ${GITLAB_BUILD_DIR?}/patches/old/omniauth_callbacks_controller.patch
-
-  patch \
-    ${GITLAB_INSTALL_DIR?}/lib/gitlab/o_auth/user.rb \
-    ${GITLAB_BUILD_DIR?}/patches/old/user.rb.patch
-
-  patch \
-    ${GITLAB_INSTALL_DIR?}/lib/gitlab/ldap/person.rb \
-    ${GITLAB_BUILD_DIR?}/patches/old/person.rb.patch
-esac
+#case ${GITLAB_VERSION?} in
+#12.1.*)
+#  git apply -v ${GITLAB_BUILD_DIR?}/patches/11.4/*
+#;;
+#11.9.*)
+#  git apply -v ${GITLAB_BUILD_DIR?}/patches/11.4/*
+#;;
+#11.8.*)
+#  git apply -v ${GITLAB_BUILD_DIR?}/patches/11.4/*
+#;;
+#11.7.*)
+#  git apply -v ${GITLAB_BUILD_DIR?}/patches/11.4/*
+#;;
+#11.6.*)
+#  git apply -v ${GITLAB_BUILD_DIR?}/patches/11.4/*
+#;;
+#11.4.*)
+#  git apply -v ${GITLAB_BUILD_DIR?}/patches/11.4/*
+#;;
+#*)
+#  patch \
+#    ${GITLAB_INSTALL_DIR?}/app/controllers/omniauth_callbacks_controller.rb \
+#    ${GITLAB_BUILD_DIR?}/patches/old/omniauth_callbacks_controller.patch
+#
+#  patch \
+#    ${GITLAB_INSTALL_DIR?}/lib/gitlab/o_auth/user.rb \
+#    ${GITLAB_BUILD_DIR?}/patches/old/user.rb.patch#
+#
+#  patch \
+#    ${GITLAB_INSTALL_DIR?}/lib/gitlab/ldap/person.rb \
+#    ${GITLAB_BUILD_DIR?}/patches/old/person.rb.patch
+#esac
 
 # configure Gitlab
 exec_as_git cp ${GITLAB_INSTALL_DIR?}/config/resque.yml.example ${GITLAB_INSTALL_DIR?}/config/resque.yml
