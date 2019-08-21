@@ -2,8 +2,6 @@
 
 export DEBIAN_FRONTEND=noninteractive
 
-# Check GIT Version
-git --version
 
 # Updating package cache and install wget to import keys
 apt-get update -qq
@@ -42,3 +40,6 @@ apt-get install -Vy \
 
 # cleanup apt
 rm -rf /var/lib/apt/lists/*
+
+# Check GIT Version
+git --version
