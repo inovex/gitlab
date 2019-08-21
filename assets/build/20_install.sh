@@ -22,6 +22,7 @@ update-locale LANG=C.UTF-8 LC_MESSAGES=POSIX
 locale-gen en_US.UTF-8
 dpkg-reconfigure locales
 
+gem install rake
 gem install --no-document bundler -v 1.17.3 \
 
 
