@@ -22,7 +22,6 @@ update-locale LANG=C.UTF-8 LC_MESSAGES=POSIX
 locale-gen en_US.UTF-8
 dpkg-reconfigure locales
 
-gem install rake
 gem install --no-document bundler -v 1.17.3 \
 
 
@@ -117,7 +116,7 @@ exec_as_git sed -i 's/db:reset/db:setup/' ${GITLAB_INSTALL_DIR?}/lib/tasks/gitla
 
 # patch Gitlab to support oid connect (https://gitlab.com/gitlab-org/gitlab-ce/issues/23255)
 #exec_as_git bundle add omniauth-openid-connect
-#exec_as_git bundle install --deployment
+exec_as_git bundle install --deployment
 
 echo "Compiling assets. Please be patient, this will take a damn long while..."
 exec_as_git yarn install --production --pure-lockfile
