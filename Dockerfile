@@ -108,7 +108,6 @@ COPY assets/build/10_prepare-install.sh ${GITLAB_BUILD_DIR}/
 RUN ${GITLAB_BUILD_DIR}/10_prepare-install.sh
 
 COPY assets/build/20_install.sh ${GITLAB_BUILD_DIR}/
-COPY assets/build/patches/ ${GITLAB_BUILD_DIR}/patches/
 RUN ${GITLAB_BUILD_DIR}/20_install.sh
 
 WORKDIR ${GITLAB_INSTALL_DIR}
