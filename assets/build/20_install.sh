@@ -40,6 +40,7 @@ useradd --create-home --user-group --home-dir=${GITLAB_HOME?} git
 exec_as_git git config --global core.autocrlf input
 exec_as_git git config --global gc.auto 0
 exec_as_git git config --global repack.writeBitmaps true
+exec_as_git git config --global receive.advertisePushOptions true
 
 ###############################################
 # Golang (used by gitlab-shell and others)
