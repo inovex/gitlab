@@ -2,6 +2,7 @@
 
 export DEBIAN_FRONTEND=noninteractive
 
+
 # Updating package cache and install wget to import keys
 apt-get update -qq
 apt-get install -Vy \
@@ -19,7 +20,7 @@ EOF
 
 case ${GITLAB_VERSION?} in
 *)
-  echo "deb https://deb.nodesource.com/node_10.x xenial main" >> /etc/apt/sources.list.d/gitlab-install.list
+  echo "deb https://deb.nodesource.com/node_12.x xenial main" >> /etc/apt/sources.list.d/gitlab-install.list
 ;;
 esac
 
@@ -39,3 +40,6 @@ apt-get install -Vy \
 
 # cleanup apt
 rm -rf /var/lib/apt/lists/*
+
+# Check GIT Version
+git --version

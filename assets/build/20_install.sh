@@ -40,6 +40,7 @@ useradd --create-home --user-group --home-dir=${GITLAB_HOME?} git
 exec_as_git git config --global core.autocrlf input
 exec_as_git git config --global gc.auto 0
 exec_as_git git config --global repack.writeBitmaps true
+exec_as_git git config --global receive.advertisePushOptions true
 
 ###############################################
 # Golang (used by gitlab-shell and others)
@@ -109,6 +110,9 @@ echo "Setup gitaly..."
 
 cd ${GITLAB_INSTALL_DIR?}
 case ${GITLAB_VERSION?} in
+12.1.*)
+  exec_as_git bundle exec rake "gitlab:gitaly:install[${GITALY_INSTALL_DIR?},${GITLAB_REPOS_DIR?}]"
+;;
 11.11.*)
   exec_as_git bundle exec rake "gitlab:gitaly:install[${GITALY_INSTALL_DIR?},${GITLAB_REPOS_DIR?}]"
 ;;
