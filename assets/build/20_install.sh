@@ -12,10 +12,10 @@ exec_as_git() {
 }
 
 # Updating package cache
-apt-get update -qq
+apt update -qq
 
 # Install build pkgs
-apt-get install -V -y \
+apt install -V -y \
   ${BUILD_DEPENDENCIES?}
 
 update-locale LANG=C.UTF-8 LC_MESSAGES=POSIX
@@ -110,16 +110,10 @@ echo "Setup gitaly..."
 
 cd ${GITLAB_INSTALL_DIR?}
 case ${GITLAB_VERSION?} in
+12.3.*)
+  exec_as_git bundle exec rake "gitlab:gitaly:install[${GITALY_INSTALL_DIR?},${GITLAB_REPOS_DIR?}]"
+;;
 12.1.*)
-  exec_as_git bundle exec rake "gitlab:gitaly:install[${GITALY_INSTALL_DIR?},${GITLAB_REPOS_DIR?}]"
-;;
-11.11.*)
-  exec_as_git bundle exec rake "gitlab:gitaly:install[${GITALY_INSTALL_DIR?},${GITLAB_REPOS_DIR?}]"
-;;
-11.9.*)
-  exec_as_git bundle exec rake "gitlab:gitaly:install[${GITALY_INSTALL_DIR?},${GITLAB_REPOS_DIR?}]"
-;;
-11.8.*)
   exec_as_git bundle exec rake "gitlab:gitaly:install[${GITALY_INSTALL_DIR?},${GITLAB_REPOS_DIR?}]"
 ;;
 *)

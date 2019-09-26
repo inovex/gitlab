@@ -4,23 +4,24 @@ export DEBIAN_FRONTEND=noninteractive
 
 
 # Updating package cache and install wget to import keys
-apt-get update -qq
-apt-get install -Vy \
+apt update
+apt install -Vy \
   apt-transport-https \
+  gnupg2 \
   sudo \
   wget
 
 # Preparing pkg repos for use
 cat >> /etc/apt/sources.list.d/gitlab-install.list <<-EOF
-deb http://ppa.launchpad.net/git-core/ppa/ubuntu xenial main
-deb http://ppa.launchpad.net/brightbox/ruby-ng/ubuntu xenial main
-deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main
+deb http://ppa.launchpad.net/git-core/ppa/ubuntu bionic main
+deb http://ppa.launchpad.net/brightbox/ruby-ng/ubuntu bionic main
+deb http://apt.postgresql.org/pub/repos/apt/ bionic-pgdg main
 deb https://dl.yarnpkg.com/debian/ stable main
 EOF
 
 case ${GITLAB_VERSION?} in
 *)
-  echo "deb https://deb.nodesource.com/node_12.x xenial main" >> /etc/apt/sources.list.d/gitlab-install.list
+  echo "deb https://deb.nodesource.com/node_12.x bionic main" >> /etc/apt/sources.list.d/gitlab-install.list
 ;;
 esac
 
@@ -32,10 +33,10 @@ wget --quiet -O - https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
 
 # Updating package cache
-apt-get update -qq
+apt update -qq
 
 # Install all needed pkgs (except build pkgs)
-apt-get install -Vy \
+apt install -Vy \
   ${GITLAB_DEPENDENCIES?}
 
 # cleanup apt

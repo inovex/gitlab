@@ -1,4 +1,4 @@
-FROM ubuntu:xenial-20181218
+FROM ubuntu:bionic-20190912.1
 
 # sperated ENV layers due to dependices to upper-layered env vars
 ENV \
@@ -40,14 +40,16 @@ ENV \
     curl \
     gettext-base \
     git-core \
-    libcurl3 \
+    graphicsmagick \
+    libcurl4 \
     libffi6 \
-    libgdbm3 \
-    libicu55 \
+    libgdbm5 \
+    libicu60 \
+    libimage-exiftool-perl \
     libncurses5 \
     libpq5 \
     libre2-dev \
-    libreadline6 \
+    libreadline7 \
     libssl1.0.0 \
     libxml2 \
     libxslt1.1 \
@@ -56,13 +58,15 @@ ENV \
     logrotate \
     nodejs \
     openssh-server \
-    postgresql-client \
-    python-docutils \
-    python2.7 \
+    postgresql-client-10 \
+    postgresql-contrib-10 \
+    python3 \
+    python3-docutils \
     redis-tools \
     ruby2.6 \
     supervisor \
     tzdata \
+    unzip \
     yarn \
     zlib1g \
   " \
@@ -100,7 +104,7 @@ ENV \
 
 ARG GITLAB_VERSION
 ARG GITLAB_DOWNLOAD_URL=https://gitlab.com/gitlab-org/gitlab-ce/repository/v${GITLAB_VERSION}/archive.tar.gz
-ARG GOLANG_VERSION=1.11.10
+ARG GOLANG_VERSION=1.12.9
 
 COPY assets/runtime/ ${GITLAB_RUNTIME_DIR}/
 
