@@ -1,5 +1,6 @@
 FROM ubuntu:bionic-20190912.1
 
+
 # sperated ENV layers due to dependices to upper-layered env vars
 ENV \
   GITLAB_DATA_DIR="/home/git/data" \
