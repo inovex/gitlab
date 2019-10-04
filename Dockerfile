@@ -45,7 +45,6 @@ ENV \
     curl \
     gettext-base \
     graphicsmagick \
-    libpcre2-8-0 \
     git-core \
     libcurl4 \
     libffi6 \
