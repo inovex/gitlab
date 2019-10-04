@@ -1,5 +1,9 @@
 FROM ubuntu:bionic-20190912.1
 
+ARG GITLAB_VERSION
+ARG GITLAB_DOWNLOAD_URL=https://gitlab.com/gitlab-org/gitlab-ce/repository/v${GITLAB_VERSION}/archive.tar.gz
+ARG GOLANG_VERSION=1.12.9
+
 # sperated ENV layers due to dependices to upper-layered env vars
 ENV \
   GITLAB_DATA_DIR="/home/git/data" \
@@ -102,10 +106,6 @@ ENV \
   GITLAB_PAGES_DIR="${GITLAB_SHARED_DIR}/pages" \
   GITLAB_REGISTRY_DIR="${GITLAB_SHARED_DIR}/registry" \
   GITLAB_VERSION="${GITLAB_VERSION}"
-
-ARG GITLAB_VERSION
-ARG GITLAB_DOWNLOAD_URL=https://gitlab.com/gitlab-org/gitlab-ce/repository/v${GITLAB_VERSION}/archive.tar.gz
-ARG GOLANG_VERSION=1.12.9
 
 COPY assets/runtime/ ${GITLAB_RUNTIME_DIR}/
 
