@@ -2,7 +2,6 @@
 
 export DEBIAN_FRONTEND=noninteractive
 
-
 # Updating package cache and install wget to import keys
 apt-get update -qq
 apt-get install -Vy \
@@ -19,11 +18,11 @@ deb http://apt.postgresql.org/pub/repos/apt/ bionic-pgdg main
 deb https://dl.yarnpkg.com/debian/ stable main
 EOF
 
-case ${GITLAB_VERSION?} in
-*)
-  echo "deb https://deb.nodesource.com/node_12.x bionic main" >> /etc/apt/sources.list.d/gitlab-install.list
-;;
-esac
+#case ${GITLAB_VERSION?} in
+#*)
+echo "deb https://deb.nodesource.com/node_12.x bionic main" >> /etc/apt/sources.list.d/gitlab-install.list
+#;;
+#esac
 
 apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 80F70E11F0F0D5F10CB20E62F5DA5F09C3173AA6
 apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 8B3981E7A6852F782CC4951600A6F0A3C300EE8C
