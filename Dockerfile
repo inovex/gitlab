@@ -30,7 +30,6 @@ ENV \
     libxml2-dev \
     libxslt-dev \
     libyaml-dev \
-    libpcre2-8-0 \
     make \
     patch \
     paxctl \
@@ -45,6 +44,7 @@ ENV \
     curl \
     gettext-base \
     graphicsmagick \
+    libpcre2-8-0 \
     git-core \
     libcurl4 \
     libffi6 \
