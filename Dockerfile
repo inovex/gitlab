@@ -26,7 +26,7 @@ ENV \
     libxml2-dev \
     libxslt-dev \
     libyaml-dev \
-    libpcre2 \
+    libpcre2-8-0 \
     make \
     patch \
     paxctl \
