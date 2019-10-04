@@ -103,6 +103,10 @@ exec_as_git bundle exec rake "gitlab:workhorse:install[${GITLAB_HOME?}/gitlab-wo
 # Make the generated binaries available for everybody
 find ${GITLAB_HOME?}/gitlab-workhorse -mindepth 1 -maxdepth 1 -type f -perm -o+x -exec ln -s {} /usr/bin/ \;
 
+###############################################
+# Gitlab-Elasticsearch-Indexer
+sudo -u git -H bundle exec rake "gitlab:indexer:install[${GITLAB_HOME?}/gitlab-elasticsearch-indexer]"
+
 
 ###############################################
 # Gitaly

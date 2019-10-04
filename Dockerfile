@@ -26,6 +26,7 @@ ENV \
     libxml2-dev \
     libxslt-dev \
     libyaml-dev \
+    libpcre2 \
     make \
     patch \
     paxctl \
@@ -57,6 +58,7 @@ ENV \
     nodejs \
     openssh-server \
     postgresql-client \
+    postgresql-contrib \
     python-docutils \
     python2.7 \
     redis-tools \
