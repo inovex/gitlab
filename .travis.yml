@@ -9,13 +9,12 @@ before_install:
 env:
   - GITLAB_VERSION=12.3.1
 
-## travis_wait will increase the default no log output timeout from 10min to 20min"  
 script:
   - image_name="inovex/gitlab:${GITLAB_VERSION?}-${TRAVIS_COMMIT:0:7}"
   - docker login -u "${DOCKER_USERNAME?}" -p "${DOCKER_PASSWORD?}"
-  - travis_wait docker build --pull --build-arg "GITLAB_VERSION=${GITLAB_VERSION?}" --tag ${image_name?} .
+  - docker build --pull --build-arg "GITLAB_VERSION=${GITLAB_VERSION?}" --tag ${image_name?} .
   - docker tag ${image_name?} ${image_name?}-dev
-  - travis_wait docker push ${image_name?}-dev
+  - docker push ${image_name?}-dev
   - |
     if [[ "${TRAVIS_BRANCH?}" == "master" && "${TRAVIS_PULL_REQUEST?}" == "false" ]]; then
       docker push ${image_name?}

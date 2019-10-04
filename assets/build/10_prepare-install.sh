@@ -3,8 +3,8 @@
 export DEBIAN_FRONTEND=noninteractive
 
 # Updating package cache and install wget to import keys
-apt-get update -qq
-apt-get install -Vy \
+apt update
+apt install -Vy \
   apt-transport-https \
   gnupg2 \
   sudo \
@@ -32,10 +32,10 @@ wget --quiet -O - https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
 
 # Updating package cache
-apt-get update -qq
+apt update -qq
 
 # Install all needed pkgs (except build pkgs)
-apt-get install -Vy \
+apt install -Vy \
   ${GITLAB_DEPENDENCIES?}
 
 # cleanup apt

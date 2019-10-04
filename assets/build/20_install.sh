@@ -12,10 +12,10 @@ exec_as_git() {
 }
 
 # Updating package cache
-apt-get update -qq
+apt update -qq
 
 # Install build pkgs
-apt-get install -V -y \
+apt install -V -y \
   ${BUILD_DEPENDENCIES?}
 
 update-locale LANG=C.UTF-8 LC_MESSAGES=POSIX
@@ -103,14 +103,10 @@ exec_as_git bundle exec rake "gitlab:workhorse:install[${GITLAB_HOME?}/gitlab-wo
 # Make the generated binaries available for everybody
 find ${GITLAB_HOME?}/gitlab-workhorse -mindepth 1 -maxdepth 1 -type f -perm -o+x -exec ln -s {} /usr/bin/ \;
 
-###############################################
-# Gitlab-Elasticsearch-Indexer
-# sudo -u git -H bundle exec rake "gitlab:indexer:install[${GITLAB_HOME?}/gitlab-elasticsearch-indexer]"
-
 
 ###############################################
 # Gitaly
-echo "Setup gitaly..."
+echo "Setup gitaly for gitlab ${GITLAB_VERSION?}..."
 
 cd ${GITLAB_INSTALL_DIR?}
 case ${GITLAB_VERSION?} in
@@ -118,15 +114,6 @@ case ${GITLAB_VERSION?} in
   exec_as_git bundle exec rake "gitlab:gitaly:install[${GITALY_INSTALL_DIR?},${GITLAB_REPOS_DIR?}]"
 ;;
 12.1.*)
-  exec_as_git bundle exec rake "gitlab:gitaly:install[${GITALY_INSTALL_DIR?},${GITLAB_REPOS_DIR?}]"
-;;
-11.11.*)
-  exec_as_git bundle exec rake "gitlab:gitaly:install[${GITALY_INSTALL_DIR?},${GITLAB_REPOS_DIR?}]"
-;;
-11.9.*)
-  exec_as_git bundle exec rake "gitlab:gitaly:install[${GITALY_INSTALL_DIR?},${GITLAB_REPOS_DIR?}]"
-;;
-11.8.*)
   exec_as_git bundle exec rake "gitlab:gitaly:install[${GITALY_INSTALL_DIR?},${GITLAB_REPOS_DIR?}]"
 ;;
 *)
