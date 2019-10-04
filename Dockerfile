@@ -4,6 +4,7 @@ ARG GITLAB_VERSION
 ARG GITLAB_DOWNLOAD_URL=https://gitlab.com/gitlab-org/gitlab-ce/repository/v${GITLAB_VERSION}/archive.tar.gz
 ARG GOLANG_VERSION=1.12.9
 
+
 # sperated ENV layers due to dependices to upper-layered env vars
 ENV \
   GITLAB_DATA_DIR="/home/git/data" \
