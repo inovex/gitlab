@@ -7,20 +7,21 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get update -qq
 apt-get install -Vy \
   apt-transport-https \
+  gnupg2 \
   sudo \
   wget
 
 # Preparing pkg repos for use
 cat >> /etc/apt/sources.list.d/gitlab-install.list <<-EOF
-deb http://ppa.launchpad.net/git-core/ppa/ubuntu xenial main
-deb http://ppa.launchpad.net/brightbox/ruby-ng/ubuntu xenial main
-deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main
+deb http://ppa.launchpad.net/git-core/ppa/ubuntu bionic main
+deb http://ppa.launchpad.net/brightbox/ruby-ng/ubuntu bionic main
+deb http://apt.postgresql.org/pub/repos/apt/ bionic-pgdg main
 deb https://dl.yarnpkg.com/debian/ stable main
 EOF
 
 case ${GITLAB_VERSION?} in
 *)
-  echo "deb https://deb.nodesource.com/node_12.x xenial main" >> /etc/apt/sources.list.d/gitlab-install.list
+  echo "deb https://deb.nodesource.com/node_12.x bionic main" >> /etc/apt/sources.list.d/gitlab-install.list
 ;;
 esac
 
