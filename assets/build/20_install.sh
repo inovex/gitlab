@@ -105,7 +105,7 @@ find ${GITLAB_HOME?}/gitlab-workhorse -mindepth 1 -maxdepth 1 -type f -perm -o+x
 
 ###############################################
 # Gitlab-Elasticsearch-Indexer
-sudo -u git -H bundle exec rake "gitlab:indexer:install[${GITLAB_HOME?}/gitlab-elasticsearch-indexer]"
+# sudo -u git -H bundle exec rake "gitlab:indexer:install[${GITLAB_HOME?}/gitlab-elasticsearch-indexer]"
 
 
 ###############################################
