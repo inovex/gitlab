@@ -181,6 +181,7 @@ sed -i \
   /etc/ssh/sshd_config
 echo "UseDNS no" >> /etc/ssh/sshd_config
 echo "AllowUsers git" >> /etc/ssh/sshd_config
+echo "MaxStartups 100" >> /etc/ssh/sshd_config
 
 ###############################################
 # Supervisor
