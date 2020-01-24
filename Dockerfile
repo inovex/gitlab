@@ -1,8 +1,8 @@
-FROM ubuntu:bionic-20190912.1
+FROM ubuntu:bionic
 
 ARG GITLAB_VERSION
 ARG GITLAB_DOWNLOAD_URL=https://gitlab.com/gitlab-org/gitlab-ce/repository/v${GITLAB_VERSION}/archive.tar.gz
-ARG GOLANG_VERSION=1.12.9
+ARG GOLANG_VERSION=1.13.5
 
 
 # sperated ENV layers due to dependices to upper-layered env vars
@@ -23,6 +23,7 @@ ENV \
     libcurl4-openssl-dev \
     libffi-dev \
     libgdbm-dev \
+    python-docutils \
     libicu-dev \
     libncurses5-dev \
     libpq-dev \
@@ -47,8 +48,9 @@ ENV \
     graphicsmagick \
     git-core \
     libcurl4 \
+    libz-dev \
     libffi6 \
-    libgdbm5 \
+    libexpat1-dev \
     libicu60 \
     libncurses5 \
     libpq5 \
