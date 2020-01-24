@@ -100,7 +100,7 @@ ENV \
 
 ARG GITLAB_VERSION
 ARG GITLAB_DOWNLOAD_URL=https://gitlab.com/gitlab-org/gitlab-ce/repository/v${GITLAB_VERSION}/archive.tar.gz
-ARG GOLANG_VERSION=1.11.10
+ARG GOLANG_VERSION=1.13.5
 
 COPY assets/runtime/ ${GITLAB_RUNTIME_DIR}/
 
