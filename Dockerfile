@@ -1,4 +1,9 @@
-FROM ubuntu:xenial-20181218
+FROM ubuntu:bionic
+
+ARG GITLAB_VERSION
+ARG GITLAB_DOWNLOAD_URL=https://gitlab.com/gitlab-org/gitlab-ce/repository/v${GITLAB_VERSION}/archive.tar.gz
+ARG GOLANG_VERSION=1.13.5
+
 
 # sperated ENV layers due to dependices to upper-layered env vars
 ENV \
@@ -18,6 +23,7 @@ ENV \
     libcurl4-openssl-dev \
     libffi-dev \
     libgdbm-dev \
+    python-docutils \
     libicu-dev \
     libncurses5-dev \
     libpq-dev \
@@ -39,15 +45,18 @@ ENV \
   GITLAB_DEPENDENCIES="\
     curl \
     gettext-base \
+    graphicsmagick \
     git-core \
-    libcurl3 \
+    libcurl4 \
+    libz-dev \
     libffi6 \
-    libgdbm3 \
-    libicu55 \
+    libexpat1-dev \
+    libicu60 \
     libncurses5 \
     libpq5 \
+    libimage-exiftool-perl \
     libre2-dev \
-    libreadline6 \
+    libreadline7 \
     libssl1.0.0 \
     libxml2 \
     libxslt1.1 \
@@ -56,9 +65,10 @@ ENV \
     logrotate \
     nodejs \
     openssh-server \
-    postgresql-client \
-    python-docutils \
-    python2.7 \
+    postgresql-client-10 \
+    postgresql-contrib-10 \
+    python3 \
+    python3-docutils \
     redis-tools \
     ruby2.6 \
     supervisor \
@@ -96,11 +106,7 @@ ENV \
   GITLAB_DOWNLOADS_DIR="${GITLAB_TEMP_DIR}/downloads" \
   GITLAB_LFS_OBJECTS_DIR="${GITLAB_SHARED_DIR}/lfs-objects" \
   GITLAB_PAGES_DIR="${GITLAB_SHARED_DIR}/pages" \
-  GITLAB_REGISTRY_DIR="${GITLAB_SHARED_DIR}/registry"
-
-ARG GITLAB_VERSION
-ARG GITLAB_DOWNLOAD_URL=https://gitlab.com/gitlab-org/gitlab-ce/repository/v${GITLAB_VERSION}/archive.tar.gz
-ARG GOLANG_VERSION=1.11.10
+  GITLAB_REGISTRY_DIR="${GITLAB_SHARED_DIR}/registry" 
 
 COPY assets/runtime/ ${GITLAB_RUNTIME_DIR}/
 

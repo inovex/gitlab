@@ -12,10 +12,10 @@ exec_as_git() {
 }
 
 # Updating package cache
-apt-get update -qq
+apt update -qq
 
 # Install build pkgs
-apt-get install -V -y \
+apt install -V -y \
   ${BUILD_DEPENDENCIES?}
 
 update-locale LANG=C.UTF-8 LC_MESSAGES=POSIX
@@ -106,23 +106,17 @@ find ${GITLAB_HOME?}/gitlab-workhorse -mindepth 1 -maxdepth 1 -type f -perm -o+x
 
 ###############################################
 # Gitaly
-echo "Setup gitaly..."
+echo "Setup gitaly for gitlab ${GITLAB_VERSION?}..."
 
 cd ${GITLAB_INSTALL_DIR?}
 case ${GITLAB_VERSION?} in
+12.7.*)
+  exec_as_git bundle exec rake "gitlab:gitaly:install[${GITALY_INSTALL_DIR?},${GITLAB_REPOS_DIR?}]"
+;;
+12.6.*)
+  exec_as_git bundle exec rake "gitlab:gitaly:install[${GITALY_INSTALL_DIR?},${GITLAB_REPOS_DIR?}]"
+;;
 12.3.*)
-  exec_as_git bundle exec rake "gitlab:gitaly:install[${GITALY_INSTALL_DIR?},${GITLAB_REPOS_DIR?}]"
-;;
-12.1.*)
-  exec_as_git bundle exec rake "gitlab:gitaly:install[${GITALY_INSTALL_DIR?},${GITLAB_REPOS_DIR?}]"
-;;
-11.11.*)
-  exec_as_git bundle exec rake "gitlab:gitaly:install[${GITALY_INSTALL_DIR?},${GITLAB_REPOS_DIR?}]"
-;;
-11.9.*)
-  exec_as_git bundle exec rake "gitlab:gitaly:install[${GITALY_INSTALL_DIR?},${GITLAB_REPOS_DIR?}]"
-;;
-11.8.*)
   exec_as_git bundle exec rake "gitlab:gitaly:install[${GITALY_INSTALL_DIR?},${GITLAB_REPOS_DIR?}]"
 ;;
 *)
@@ -177,6 +171,7 @@ sed -i \
   /etc/ssh/sshd_config
 echo "UseDNS no" >> /etc/ssh/sshd_config
 echo "AllowUsers git" >> /etc/ssh/sshd_config
+echo "MaxStartups 100" >> /etc/ssh/sshd_config
 
 ###############################################
 # Supervisor
